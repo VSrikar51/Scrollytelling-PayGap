@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Pay Gap Story | A Data Visualization Journey</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">The Pay Gap Story</h1>
+      <p class="hero-subtitle">
+        An interactive journey through the data revealing how gender and race shape earnings in America
+      </p>
+    </div>
+    <div class="scroll-indicator">↓</div>
+  </section>
+
+  <section class="stats-section">
+    <h2 class="stats-title">The Numbers Speak</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-gap">35%</div>
+        <div class="stat-label">Black Women Pay Gap</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-annual">$21K</div>
+        <div class="stat-label">Annual Income Difference</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-ratio">$0.65</div>
+        <div class="stat-label">Per $1.00 White Men Earn</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scrolly-section">
+    <div class="scrolly-container">
+      <div class="sticky-viz">
+        <div class="viz-content" id="race-gender-viz"></div>
+      </div>
+      <div class="story-steps">
+        <div class="step" data-step="0">
+          <div class="step-content">
+            <h3 class="step-title">The First Reality</h3>
+            <p class="step-text">
+              When we think of pay gaps, gender often comes to mind first. But the picture is more complex.
+            </p>
+            <p class="step-text">
+              This chart shows the proportion of people earning over $50K annually, broken down by race and gender.
+            </p>
+            <p class="impact-line">
+              The gap exists across all racial groups.
+            </p>
+          </div>
+        </div>
+
+        <div class="step" data-step="1">
+          <div class="step-content">
+            <h3 class="step-title">Not All Gaps Are Equal</h3>
+            <p class="step-text">
+              While gender gaps persist across races, their magnitude varies significantly.
+            </p>
+            <p class="step-text">
+              Some racial groups face additional barriers that compound the gender pay gap.
+            </p>
+            <p class="impact-line">
+              Intersectionality matters in understanding income inequality.
+            </p>
+          </div>
+        </div>
+
+        <div class="step" data-step="2">
+          <div class="step-content">
+            <h3 class="step-title">Beyond Gender</h3>
+            <p class="step-text">
+              Even among men, race creates substantial income disparities.
+            </p>
+            <p class="step-text">
+              The pay gap is not just about gender—it's deeply intertwined with race and systemic inequalities.
+            </p>
+            <p class="impact-line">
+              Multiple identities create multiple barriers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="full-chart-section">
+    <h2 class="chart-title">Earnings Ratio by Gender and Race</h2>
+    <p class="chart-description">
+      How different demographic groups compare to White Men's earnings ($1.00 baseline)
+    </p>
+    <div class="chart-container">
+      <div id="bar-chart"></div>
+    </div>
+    <div class="legend" id="bar-legend"></div>
+  </section>
+
+  <section class="full-chart-section">
+    <h2 class="chart-title">Distribution of Pay Ratios</h2>
+    <p class="chart-description">
+      The range and concentration of earnings across demographic groups
+    </p>
+    <div class="chart-container">
+      <div id="violin-chart"></div>
+    </div>
+  </section>
+
+  <section class="scrolly-section scrolly-timeline">
+    <div class="scrolly-container">
+      <div class="sticky-viz">
+        <div class="viz-content">
+          <svg id="timeline-chart"></svg>
+        </div>
+      </div>
+      <div class="story-steps">
+        <div class="step" data-step="3">
+          <div class="step-content">
+            <h3 class="step-title">Four Decades of Progress</h3>
+            <p class="step-text">
+              Since 1980, women's earnings have risen from 60% to 83% of men's earnings.
+            </p>
+            <p class="impact-line">
+              But progress has stalled in recent decades.
+            </p>
+          </div>
+        </div>
+
+        <div class="step" data-step="4">
+          <div class="step-content">
+            <h3 class="step-title">The Stagnation</h3>
+            <p class="step-text">
+              Notice how the line flattens after 2000. In the past 23 years, the gap has only closed by 9 percentage points.
+            </p>
+            <p class="impact-line">
+              At this rate, equity is still decades away.
+            </p>
+          </div>
+        </div>
+
+        <div class="step" data-step="5">
+          <div class="step-content">
+            <h3 class="step-title">At This Rate...</h3>
+            <p class="step-text">
+              If progress continues at the current pace, it will take until 2070 to achieve pay equity.
+            </p>
+            <p class="impact-line">
+              That's 45 more years of inequality.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scrolly-section scrolly-particle">
+    <div class="scrolly-container">
+      <div class="sticky-viz">
+        <div class="viz-content" style="background: #1a1a2e; border-radius: 20px;">
+          <canvas id="particle-canvas"></canvas>
+          <div class="particle-legend">
+            <div style="font-weight: bold; margin-bottom: 10px; font-size: 14px;">Earnings Erosion</div>
+            <div style="font-size: 11px; margin-bottom: 10px; color: #999;">Particles fall = lost earnings</div>
+            <div style="font-size: 11px; margin-bottom: 12px; color: #999;">Each particle = $10,000</div>
+            <div class="particle-legend-item">
+              <div class="particle-legend-color" style="background-color: #10b981;"></div>
+              <span>Baseline (White Men BA)</span>
+            </div>
+            <div class="particle-legend-item">
+              <div class="particle-legend-color" style="background-color: #f59e0b;"></div>
+              <span>White Women BA Loss</span>
+            </div>
+            <div class="particle-legend-item">
+              <div class="particle-legend-color" style="background-color: #ef4444;"></div>
+              <span>Black Women Loss</span>
+            </div>
+            <div class="particle-legend-item">
+              <div class="particle-legend-color" style="background-color: #ec4899;"></div>
+              <span>Hispanic Women Loss</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="story-steps">
+        <div class="step" data-step="6">
+          <div class="step-content">
+            <h3 class="step-title">Equal Starting Point</h3>
+            <p class="step-text">
+              Imagine all groups starting with the same baseline earnings over a 40-year career.
+            </p>
+            <p class="impact-line">
+              Watch what happens to different groups.
+            </p>
+          </div>
+        </div>
+
+        <div class="step" data-step="7">
+          <div class="step-content">
+            <h3 class="step-title">$400,000 Lost</h3>
+            <p class="step-text">
+              A white woman with a bachelor's degree will earn approximately $400,000 less than her male counterpart over a career.
+            </p>
+            <p class="impact-line">
+              That's a house down payment, retirement savings, or a child's education.
+            </p>
+          </div>
+        </div>
+
+        <div class="step" data-step="8">
+          <div class="step-content">
+            <h3 class="step-title">The Compounding Effect</h3>
+            <p class="step-text">
+              For Black women, the loss is nearly $900,000. For Hispanic women, over $1 million in lifetime earnings disappear.
+            </p>
+            <p class="impact-line">
+              This isn't just a gap—it's generational wealth denied.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <h2 class="map-title">Pay Gap Across America</h2>
+    <p class="chart-description">
+      Gender pay gap varies significantly by state—hover to explore
+    </p>
+    <div id="hex-map"></div>
+  </section>
+
+  <section class="full-chart-section">
+    <h2 class="chart-title">Experience vs Income</h2>
+    <p class="chart-description">
+      Does experience level the playing field? Explore how years of work relate to high income across demographics
+    </p>
+    <div class="chart-container" id="scatter-plot-container"></div>
+    <div class="legend" style="flex-wrap: wrap; max-width: 900px; margin: 30px auto;">
+      <div style="width: 100%; text-align: center; font-weight: 600; margin-bottom: 15px; color: rgba(255,255,255,0.7);">
+        Color: Gender | Shape: Race
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #4e79a7;"></div>
+        <span>Male</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #e15759;"></div>
+        <span>Female</span>
+      </div>
+      <div class="legend-item"><span>● White</span></div>
+      <div class="legend-item"><span>■ Black</span></div>
+      <div class="legend-item"><span>▲ Asian-Pac-Islander</span></div>
+      <div class="legend-item"><span>◆ Amer-Indian-Eskimo</span></div>
+      <div class="legend-item"><span>★ Other</span></div>
+    </div>
+  </section>
+
+  <section class="conclusion-section">
+    <div class="conclusion-content">
+      <h2 class="conclusion-title">The Story the Numbers Tell</h2>
+      <p class="conclusion-text">
+        These visualizations together reveal a consistent truth: gender and racial pay gaps are real, measurable, and persistent.
+      </p>
+      <p class="conclusion-text" style="font-size: 1.5rem; font-weight: 600;">
+        Equal work. Equal skills. Unequal outcomes.
+      </p>
+      <p class="hope-message">
+        Understanding these patterns is the first step toward creating meaningful change.
+      </p>
+      <p style="margin-top: 60px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+        Data Sources: Panel Study of Income Dynamics (PSID), U.S. Bureau of Labor Statistics, Kaggle Adult Income Dataset
+      </p>
+      <p style="margin-top: 10px; color: rgba(255,255,255,0.4); font-size: 0.85rem;">
+        Team: Rudra Shah, Freya Shah, Naga Sai Rama Srikar V., Harshit Kumar M., Sree Lasya Reddy C., Isha Shah
+      </p>
+    </div>
+  </section>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/barChart.js"></script>
+  <script src="js/violinChart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
